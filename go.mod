@@ -1,5 +1,4 @@
 module github.com/Selteve/selgolang
-
 go 1.22.5
 
 require (
