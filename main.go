@@ -10,6 +10,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// 版本号
+const version = "0.1.0"
+
 // 拉取 GitHub 上的模板仓库
 func cloneTemplateRepo(repoURL, targetDir string) error {
 	// 使用 go-git 拉取远程仓库
@@ -75,8 +78,8 @@ func createProjectFromTemplate(projectName, repoURL, targetDir string) error {
 func main() {
 	var repoURL string
 	var rootCmd = &cobra.Command{
-		Use:   "selgo",
-		Short: "Selgo is a project scaffolding tool.",
+		Use:   "selgolang",
+		Short: "Selgolang is a project scaffolding tool.",
 	}
 
 	// `selgo new <projectname>` 命令
@@ -104,8 +107,18 @@ func main() {
 		},
 	}
 
+    // `selgolang -v` 或 `selgolang --version` 命令
+	var versionCmd = &cobra.Command{
+		Use:   "version",
+		Short: "Print the version number of Selgolang",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Printf("Selgolang version %s\n", version)
+		},
+	}
 	// 将 `new` 命令添加到 root 命令
 	rootCmd.AddCommand(newCmd)
+	// 将 `version` 命令添加到 root 命令
+	rootCmd.AddCommand(versionCmd)
 
 	// 执行命令
 	if err := rootCmd.Execute(); err != nil {
@@ -113,3 +126,4 @@ func main() {
 		os.Exit(1)
 	}
 }
+
