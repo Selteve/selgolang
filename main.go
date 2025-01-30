@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -115,10 +116,42 @@ func main() {
 			fmt.Printf("Selgolang version %s\n", version)
 		},
 	}
+	// `build` 命令的 flag
+	var buildCmd = &cobra.Command{
+		Use:   "build",
+		Short: "Build the project",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("Building the project...")
+			// 执行构建命令
+			out, err := exec.Command("go", "build", ".").CombinedOutput()
+			if err != nil {
+				fmt.Printf("Error: %s\n", err)
+			}
+			fmt.Printf("Successfully: %s\n", string(out))
+		},
+	}
+	// `run` 命令的 flag
+	var runCmd = &cobra.Command{
+		Use:   "run",
+		Short: "run the project",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("Runing the project...")
+			// 执行构建命令
+			out, err := exec.Command("go", "run", "main.go").CombinedOutput()
+			if err != nil {
+				fmt.Printf("Error: %s\n", err)
+			}
+			fmt.Printf("successfully: %s\n", string(out))
+		},
+	}
 	// 将 `new` 命令添加到 root 命令
 	rootCmd.AddCommand(newCmd)
 	// 将 `version` 命令添加到 root 命令
 	rootCmd.AddCommand(versionCmd)
+	// 将 `build` 命令添加到 root 命令
+	rootCmd.AddCommand(buildCmd)
+	// 将 `run` 命令添加到 root 命令
+	rootCmd.AddCommand(runCmd)
 
 	// 执行命令
 	if err := rootCmd.Execute(); err != nil {
@@ -126,4 +159,3 @@ func main() {
 		os.Exit(1)
 	}
 }
-
